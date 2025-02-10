@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Search, Users, Clock, Folder, MoreHorizontal, ChevronDown } from 'lucide-react';
 import DashboardStats from './DashboardStats';
 import WorkspaceDrawer from './WorkspaceDrawer';
+import CreateTestModal from './CreateTestModal';
 
 interface Workspace {
   id: number;
@@ -18,6 +19,7 @@ const WorkspacePage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const workspaces: Workspace[] = [
@@ -105,10 +107,13 @@ const WorkspacePage = () => {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
                 <h2 className="text-lg font-semibold text-white">Recent studies</h2>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <button className="btn-glow btn-responsive px-4 py-2 text-white rounded-lg flex items-center justify-center gap-2">
-                    <Plus className="w-5 h-5" />
-                    New study
-                  </button>
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="btn-glow flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg"
+              >
+                <Plus className="w-5 h-5" />
+                New Study
+              </button>
                   <button className="btn-responsive px-4 py-2 text-dark-400 hover:text-white rounded-lg hover:bg-dark-800 transition-colors">
                     Go to projects
                   </button>
@@ -264,6 +269,7 @@ const WorkspacePage = () => {
           }}
         />
       )}
+      {isCreateModalOpen && <CreateTestModal onClose={() => setIsCreateModalOpen(false)} />}
     </div>
   );
 };
