@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
-import { useAuthStore } from '../store/authStore';
-
+// Add error handling
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAuthStore();
+  const { user, loading, error } = useAuthStore();
 
-  // No need for real-time auth state management with basic auth
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorFallback error={error} />;
+
   return children;
 }
