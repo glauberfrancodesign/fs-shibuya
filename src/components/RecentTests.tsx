@@ -1,7 +1,9 @@
 import React from 'react';
-import { MoreVertical, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { MoreVertical, ExternalLink, Eye } from 'lucide-react';
 
 const RecentTests = () => {
+  const navigate = useNavigate();
   const recentTests = [
     {
       id: 1,
@@ -88,9 +90,18 @@ const RecentTests = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <button className="text-gray-400 hover:text-gray-600 transition-colors">
-                    <MoreVertical className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => navigate(`/tests/${test.id}`)}
+                      className="text-gray-400 hover:text-gray-600 transition-colors"
+                      title="View Details"
+                    >
+                      <Eye className="w-5 h-5" />
+                    </button>
+                    <button className="text-gray-400 hover:text-gray-600 transition-colors">
+                      <MoreVertical className="w-5 h-5" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

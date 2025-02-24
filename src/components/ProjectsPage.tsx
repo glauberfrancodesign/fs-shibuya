@@ -2,11 +2,35 @@ import React, { useState } from 'react';
 import { Plus, Search, ExternalLink, Archive, Clock, Users, Folder, MoreHorizontal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import CreateTestModal from './CreateTestModal';
+import ProjectDrawer from './ProjectDrawer';
 
 const ProjectsPage = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<{
+    id: number;
+    name: string;
+    description: string;
+    members: number;
+    tasks: number;
+    lastActive: string;
+    thumbnail?: string;
+  } | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleOpenDrawer = (project: {
+    id: number;
+    name: string;
+    description: string;
+    members: number;
+    tasks: number;
+    lastActive: string;
+    thumbnail?: string;
+  }) => {
+    setSelectedProject(project);
+    setIsDrawerOpen(true);
+  };
   const [activeTab, setActiveTab] = useState<'active' | 'archived'>('active');
 
   const projects = {
@@ -15,30 +39,27 @@ const ProjectsPage = () => {
         id: 1,
         name: 'E-commerce Redesign',
         description: 'Complete overhaul of the main e-commerce platform',
-        status: 'In Progress',
-        progress: 65,
         members: 8,
-        lastUpdated: '2024-03-18',
+        tasks: 23,
+        lastActive: '2024-03-18',
         thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80'
       },
       {
         id: 2,
         name: 'Mobile App Testing',
         description: 'User testing for the new mobile application',
-        status: 'Planning',
-        progress: 15,
         members: 5,
-        lastUpdated: '2024-03-17',
+        tasks: 15,
+        lastActive: '2024-03-17',
         thumbnail: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=500&q=80'
       },
       {
         id: 3,
         name: 'Dashboard Analytics',
         description: 'Implementation of new analytics dashboard',
-        status: 'Review',
-        progress: 90,
         members: 4,
-        lastUpdated: '2024-03-16',
+        tasks: 42,
+        lastActive: '2024-03-16',
         thumbnail: 'https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?w=500&q=80'
       }
     ],
@@ -47,20 +68,18 @@ const ProjectsPage = () => {
         id: 4,
         name: 'Legacy System Migration',
         description: 'Migration of legacy systems to new platform',
-        status: 'Completed',
-        progress: 100,
         members: 12,
-        lastUpdated: '2024-02-28',
+        tasks: 87,
+        lastActive: '2024-02-28',
         thumbnail: 'https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=500&q=80'
       },
       {
         id: 5,
         name: 'UI Component Library',
         description: 'Design and development of reusable UI components',
-        status: 'Completed',
-        progress: 100,
         members: 6,
-        lastUpdated: '2024-02-15',
+        tasks: 42,
+        lastActive: '2024-02-15',
         thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80'
       }
     ]
@@ -158,9 +177,15 @@ const ProjectsPage = () => {
                       <Folder className="w-12 h-12 text-dark-700" />
                     </div>
                   )}
-                  <button className="absolute top-3 right-3 p-1.5 bg-dark-900/80 rounded-lg text-dark-400 hover:text-white backdrop-blur-sm">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </button>
+                 <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenDrawer(project);
+                  }}
+                  className="absolute top-3 right-3 p-1.5 bg-dark-900/80 rounded-lg text-dark-400 hover:text-white backdrop-blur-sm"
+                >
+                  <MoreHorizontal className="w-4 h-4" />
+                </button>
                 </div>
 
                 <div className="p-5">
@@ -168,8 +193,8 @@ const ProjectsPage = () => {
                     <h3 className="text-lg font-medium text-white group-hover:text-accent-500 transition-colors">
                       {project.name}
                     </h3>
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
-                      {project.status}
+                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-dark-700/50 text-dark-400">
+                      {project.tasks} tasks
                     </span>
                   </div>
 
@@ -183,14 +208,12 @@ const ProjectsPage = () => {
                       </div>
                       <div className="flex items-center gap-1.5 text-dark-400">
                         <Clock className="w-4 h-4" />
-                        {new Date(project.lastUpdated).toLocaleDateString()}
+                        {new Date(project.lastActive).toLocaleDateString()}
                       </div>
                     </div>
-                    <div className="h-2 w-24 bg-dark-800 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-accent-500 rounded-full"
-                        style={{ width: `${project.progress}%` }}
-                      />
+                    <div className="flex items-center gap-1.5 text-dark-400">
+                      <Folder className="w-4 h-4" />
+                      {project.tasks} tasks
                     </div>
                   </div>
                 </div>
@@ -201,6 +224,16 @@ const ProjectsPage = () => {
       </div>
 
       {isCreateModalOpen && <CreateTestModal onClose={() => setIsCreateModalOpen(false)} />}
+      {selectedProject && (
+        <ProjectDrawer
+          project={selectedProject}
+          isOpen={isDrawerOpen}
+          onClose={() => {
+            setIsDrawerOpen(false);
+            setSelectedProject(null);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import WorkspacePage from './components/WorkspacePage';
 import ProjectsPage from './components/ProjectsPage';
@@ -9,6 +9,7 @@ import BoardPage from './components/BoardPage';
 import BoardsPage from './components/BoardsPage';
 import KanbanBoard from './components/KanbanBoard';
 import AuthPage from './components/AuthPage';
+import TestResultsPage from './components/TestResultsPage';
 import { AuthGuard } from './components/AuthGuard';
 import { AuthProvider } from './components/AuthProvider';
 import { useSidebarStore } from './store/sidebarStore';
@@ -17,7 +18,6 @@ function App() {
   const { isCollapsed } = useSidebarStore();
 
   return (
-    <Router>
       <AuthProvider>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
@@ -39,6 +39,7 @@ function App() {
                       <Route path="/board/:id" element={<BoardPage />} />
                       <Route path="/kanban" element={<KanbanBoard />} />
                       <Route path="/settings/profile" element={<ProfileSettings />} />
+                      <Route path="/test/results/:testId" element={<TestResultsPage />} />
                       <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                   </main>
@@ -48,7 +49,6 @@ function App() {
           />
         </Routes>
       </AuthProvider>
-    </Router>
   );
 }
 

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, Users, Clock, Folder, MoreHorizontal, ChevronDown } from 'lucide-react';
+import { Plus, Search, Users, Clock, Folder, Eye, ChevronDown } from 'lucide-react';
 import DashboardStats from './DashboardStats';
 import WorkspaceDrawer from './WorkspaceDrawer';
 import CreateTestModal from './CreateTestModal';
+import RecentTests from './RecentTests';
 
 interface Workspace {
   id: number;
@@ -114,7 +115,9 @@ const WorkspacePage = () => {
                 <Plus className="w-5 h-5" />
                 New Study
               </button>
-                  <button className="btn-responsive px-4 py-2 text-dark-400 hover:text-white rounded-lg hover:bg-dark-800 transition-colors">
+                  <button 
+                    onClick={() => navigate('/projects')}
+                    className="btn-responsive px-4 py-2 text-dark-400 hover:text-white rounded-lg hover:bg-dark-800 transition-colors">
                     Go to projects
                   </button>
                 </div>
@@ -167,8 +170,10 @@ const WorkspacePage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <button className="p-1 text-dark-400 hover:text-white rounded-lg hover:bg-dark-700">
-                            <MoreHorizontal className="w-4 h-4" />
+                          <button
+                           onClick={() => navigate(`/test/results/${test.id}`)}
+                           className="p-1 text-dark-400 hover:text-white rounded-lg hover:bg-dark-700">
+                            <Eye className="w-4 h-4" />
                           </button>
                         </td>
                       </tr>
@@ -225,7 +230,7 @@ const WorkspacePage = () => {
                       }}
                       className="absolute top-3 right-3 p-1.5 bg-dark-900/80 rounded-lg text-dark-400 hover:text-white backdrop-blur-sm"
                     >
-                      <MoreHorizontal className="w-4 h-4" />
+                      <Eye className="w-4 h-4" />
                     </button>
                   </div>
 
